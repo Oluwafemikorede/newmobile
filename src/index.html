@@ -1,0 +1,317 @@
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home | G-Code</title>
+
+    
+    <meta name="description" content="Documentation and reference library for ZURB Foundation. JavaScript, CSS, components, grid and more." />
+    
+    <meta name="author" content="ZURB, inc. ZURB network also includes zurb.com" />
+    <meta name="copyright" content="ZURB, inc. Copyright (c) 2013" />
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="assets/css/foundation.css" />
+    <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet"> -->
+     <script src="phonegap.js"></script>
+    <script src="assets/js/modernizr.js"></script>
+
+      <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/foundation.js"></script>
+    <script>
+      $(document).foundation();
+
+      var doc = document.documentElement;
+      doc.setAttribute('data-useragent', navigator.userAgent);
+    </script>
+  
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    // PhoneGap is ready
+    function onDeviceReady() {
+    // Do cool things here...
+     pictureSource = navigator.camera.PictureSourceType;
+    destinationType = navigator.camera.DestinationType;
+
+    if (navigator.notification) {
+            navigator.notification.alert(message, null, title, 'OK');
+        } else {
+            alert(title ? (title + ": " + message) : message);
+        }
+
+    }
+
+
+
+
+    
+        
+
+
+
+
+ 
+      console.log( "ready!" );
+
+
+
+$("#snap").click( function(event) {
+
+event.preventDefault();
+    if (!navigator.camera) {
+        app.showAlert("Camera API not supported", "Error");
+        return;
+    }
+
+    var options =   {   quality: 100,
+                       /* destinationType: Camera.DestinationType.DATA_URL,*/
+                        destinationType: Camera.DestinationType.FILE_URI,
+                        sourceType: 1,      // 0:Photo Library, 1=Camera, 2=Saved Photo Album
+                        encodingType: 0     // 0=JPG 1=PNG
+                    };
+
+     navigator.camera.getPicture(
+        function(imageData) {
+            $('#cam_port', this.el).attr('src', "data:image/jpeg;base64," + imageData);
+        },
+        function() {
+            app.showAlert('Error taking picture', 'Error');
+        },
+        options);
+ 
+return false;
+
+  });
+
+$("#send").click(function(event)
+{
+
+function uploadPhoto(imageURI) {
+            var options = new FileUploadOptions();
+            options.fileKey="file";
+            options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+            options.mimeType="image/jpeg";
+ 
+            var params = new Object();
+            params.value1 = "test";
+            params.value2 = "param";
+ 
+            options.params = params;
+            options.chunkedMode = false;
+ 
+            var ft = new FileTransfer();
+            ft.upload(imageURI, "http://exolvetechnologies.com/gcode/api/mobile", win, fail, options);
+        }
+
+navigator.geolocation.getCurrentPosition(
+        function(position) {
+            $('.location', this.el).html(position.coords.latitude + ',' + position.coords.longitude);
+            alert(position.coords.latitude + ',' + position.coords.longitude);
+
+
+
+var comments = $('#comment').val();
+var category = $('#category').val();
+var base_url = "http://exolvetechnologies.com/gcode/api";
+var url = base_url + "/location";
+
+var data = {
+        gcode: 'LA100' , 
+        lat: position.coords.latitude , 
+        lng: position.coords.longitude, 
+        comment: comments, 
+        category: category };
+
+$.ajax({
+    url: url,
+    crossDomain: true,
+    type: "POST",
+    data: data,
+    success: (function (data, status) {
+        console.log('successful');
+        $("#post_story").text("");
+        $("#title").text("");
+    }),
+    error: (function (xhr, status, err) {
+        console.log('error occurs here');
+    })
+});
+        },
+        function() {
+            alert('Error getting location');
+        });
+
+});
+
+    </script>
+    <!-- <script type="text/javascript">
+var pictureSource;   // picture source
+var destinationType; // sets the format of returned value
+ 
+document.addEventListener("deviceready", onDeviceReady, false);
+ 
+function onDeviceReady() {
+    pictureSource = navigator.camera.PictureSourceType;
+    destinationType = navigator.camera.DestinationType;
+}
+ 
+function clearCache() {
+    navigator.camera.cleanup();
+}
+ 
+var retries = 0;
+function onCapturePhoto(fileURI) {
+    var win = function (r) {
+        clearCache();
+        retries = 0;
+        alert('Done!');
+    }
+ 
+    var fail = function (error) {
+        if (retries == 0) {
+            retries ++
+            setTimeout(function() {
+                onCapturePhoto(fileURI)
+            }, 1000)
+        } else {
+            retries = 0;
+            clearCache();
+            alert('Ups. Something wrong happens!');
+        }
+    }
+ 
+    var options = new FileUploadOptions();
+    options.fileKey = "file";
+    options.fileName = fileURI.substr(fileURI.lastIndexOf('/') + 1);
+    options.mimeType = "image/jpeg";
+    options.params = {}; // if we need to send parameters to the server request
+    var ft = new FileTransfer();
+    ft.upload(fileURI, encodeURI("http://exolvetechnologies.com/gcode/api/upload"), win, fail, options);
+}
+ 
+function capturePhoto() {
+    navigator.camera.getPicture(onCapturePhoto, onFail, {
+        quality: 100,
+        destinationType: destinationType.FILE_URI
+    });
+}
+ 
+function onFail(message) {
+    alert('Failed because: ' + message);
+}
+    </script> -->
+  </head>
+  <body>
+    
+
+  <!-- Header and Nav -->
+  <nav class="top-bar" data-topbar>
+    <ul class="title-area">
+      <!-- Title Area -->
+      <li class="name">
+        <h1>
+          <a href="#">
+            <img src="assets/images/g-code-logo.jpg" style="width: 100px;" />
+          </a>
+        </h1>
+      </li>
+      <li class="toggle-topbar menu-icon"><a href="#"><span>About</span></a></li>
+    </ul>
+
+    <section class="top-bar-section">
+
+      <!-- Right Nav Section -->
+      <!-- <ul class="right">
+        <li class="divider"></li>
+        <li class="has-dropdown">
+          <a href="#">Main Item 4</a>
+          <ul class="dropdown">
+            <li><label>Section Name</label></li>
+            <li class="has-dropdown">
+              <a href="#" class="">Has Dropdown, Level 1</a>
+              <ul class="dropdown">
+                <li><a href="#">Dropdown Options</a></li>
+                <li><a href="#">Dropdown Options</a></li>
+                <li class="has-dropdown">
+                  <a href="#">Has Dropdown, Level 2</a>
+                  <ul class="dropdown test">
+                    <li><a href="#">Subdropdown Option</a></li>
+                    <li><a href="#">Subdropdown Option</a></li>
+                    <li><a href="#">Subdropdown Option</a></li>
+                  </ul>
+                </li>
+                <li><a href="#">Subdropdown Option</a></li>
+                <li><a href="#">Subdropdown Option</a></li>
+                <li><a href="#">Subdropdown Option</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Dropdown Option</a></li>
+            <li><a href="#">Dropdown Option</a></li>
+            <li class="divider"></li>
+            <li><label>Section Name</label></li>
+            <li><a href="#">Dropdown Option</a></li>
+            <li><a href="#">Dropdown Option</a></li>
+            <li><a href="#">Dropdown Option</a></li>
+            <li class="divider"></li>
+            <li><a href="#">See all &rarr;</a></li>
+          </ul>
+        </li>
+        <li class="divider"></li>
+        <li><a href="#">Main Item 5</a></li>
+        <li class="divider"></li>
+        <li class="has-dropdown">
+          <a href="#">Main Item 6</a>
+          <ul class="dropdown">
+            <li><a href="#">Dropdown Option</a></li>
+            <li><a href="#">Dropdown Option</a></li>
+            <li><a href="#">Dropdown Option</a></li>
+            <li class="divider"></li>
+            <li><a href="#">See all &rarr;</a></li>
+          </ul>
+        </li>
+      </ul> -->
+    </section>
+  </nav>
+  
+  <div class="row panel">
+  
+  			<div class="large-12 small-12 columns">
+            	<select id="category">
+                	<option> Select Category </option>
+                    <option value="#fire"> Fire </option>
+                    <option value="#Security"> Security </option>
+                    <option value="#Police"> Police </option>
+                    <option value="#Polling"> Polling </option>
+                    <option value="#Traffic"> Traffic </option>
+                    <option value="#healthEmergency"> Health Emergency </option>
+                </select>
+            </div>
+  
+              <div class="large-12 small-12 columns">
+                <div class="panel btn" id="snap" style="border:1px solid #efefef; border-radius:2px">
+                 <center>
+                  <h5>Take Picture</h5>
+                	<i class="fa fa-5x fa-picture-o"></i>
+                  <img id='cam_port' src="">
+                   </center>
+                </div>
+              </div>
+           <div class="large-9 small-9 columns">
+                <div class="panel" style="padding:0px !important;">
+                 <textarea rows="" id="comment" placeholder="Comment/Reviews">Comment/Reviews</textarea>
+                </div>
+              </div>
+ 
+              <div class="large-3 small-3 columns">
+                <a href="javascript:;" id="send" class="small button"><i class="fa fa-upload"></i> <br/>Send</a>
+              </div>
+          </div>
+  
+          </div>
+  </body>
+</html>
+
